@@ -1,7 +1,7 @@
 import composeUrl from "./composeUrl";
 import { KeyValueMap, SafeFetchOptions } from "./types";
 
-export const getSafeFetch = <paths>(options: SafeFetchOptions) => {
+const getSafeFetch = <paths>(options: SafeFetchOptions) => {
   type Path = keyof paths;
   type PathMethods<P extends Path> = keyof paths[P];
 
@@ -99,3 +99,5 @@ export const getSafeFetch = <paths>(options: SafeFetchOptions) => {
 
   return safeFetch;
 };
+
+export default getSafeFetch;

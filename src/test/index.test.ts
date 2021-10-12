@@ -5,7 +5,7 @@ jest.mock("node-fetch", () => {
   return jest.fn();
 });
 
-import { getSafeFetch } from "..";
+import getSafeFetch from "..";
 import { paths as PetstoreApi } from "./petstore";
 
 const safeFetch = getSafeFetch<PetstoreApi>({ fetch: fetch as any });
