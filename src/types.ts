@@ -5,9 +5,9 @@ export type SafeFetchOptions = {
 
 export type KeyValueMap = Record<string, string | number | boolean>;
 
-export type ComposeUrl = (params: {
+export type ComposeUrlParams = {
   baseUrl?: string;
   endpoint: string;
   path: KeyValueMap;
   query: KeyValueMap;
-}) => string;
+};

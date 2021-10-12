@@ -4,62 +4,62 @@
  */
 
 export interface paths {
-  "/pet/{petId}/uploadImage": {
-    post: operations["uploadFile"];
+  '/pet/{petId}/uploadImage': {
+    post: operations['uploadFile'];
   };
-  "/pet": {
-    put: operations["updatePet"];
-    post: operations["addPet"];
+  '/pet': {
+    put: operations['updatePet'];
+    post: operations['addPet'];
   };
-  "/pet/findByStatus": {
+  '/pet/findByStatus': {
     /** Multiple status values can be provided with comma separated strings */
-    get: operations["findPetsByStatus"];
+    get: operations['findPetsByStatus'];
   };
-  "/pet/findByTags": {
+  '/pet/findByTags': {
     /** Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing. */
-    get: operations["findPetsByTags"];
+    get: operations['findPetsByTags'];
   };
-  "/pet/{petId}": {
+  '/pet/{petId}': {
     /** Returns a single pet */
-    get: operations["getPetById"];
-    post: operations["updatePetWithForm"];
-    delete: operations["deletePet"];
+    get: operations['getPetById'];
+    post: operations['updatePetWithForm'];
+    delete: operations['deletePet'];
   };
-  "/store/inventory": {
+  '/store/inventory': {
     /** Returns a map of status codes to quantities */
-    get: operations["getInventory"];
+    get: operations['getInventory'];
   };
-  "/store/order": {
-    post: operations["placeOrder"];
+  '/store/order': {
+    post: operations['placeOrder'];
   };
-  "/store/order/{orderId}": {
+  '/store/order/{orderId}': {
     /** For valid response try integer IDs with value >= 1 and <= 10. Other values will generated exceptions */
-    get: operations["getOrderById"];
+    get: operations['getOrderById'];
     /** For valid response try integer IDs with positive integer value. Negative or non-integer values will generate API errors */
-    delete: operations["deleteOrder"];
+    delete: operations['deleteOrder'];
   };
-  "/user/createWithList": {
-    post: operations["createUsersWithListInput"];
+  '/user/createWithList': {
+    post: operations['createUsersWithListInput'];
   };
-  "/user/{username}": {
-    get: operations["getUserByName"];
+  '/user/{username}': {
+    get: operations['getUserByName'];
     /** This can only be done by the logged in user. */
-    put: operations["updateUser"];
+    put: operations['updateUser'];
     /** This can only be done by the logged in user. */
-    delete: operations["deleteUser"];
+    delete: operations['deleteUser'];
   };
-  "/user/login": {
-    get: operations["loginUser"];
+  '/user/login': {
+    get: operations['loginUser'];
   };
-  "/user/logout": {
-    get: operations["logoutUser"];
+  '/user/logout': {
+    get: operations['logoutUser'];
   };
-  "/user/createWithArray": {
-    post: operations["createUsersWithArrayInput"];
+  '/user/createWithArray': {
+    post: operations['createUsersWithArrayInput'];
   };
-  "/user": {
+  '/user': {
     /** This can only be done by the logged in user. */
-    post: operations["createUser"];
+    post: operations['createUser'];
   };
 }
 
@@ -75,12 +75,12 @@ export interface definitions {
   };
   Pet: {
     id?: number;
-    category?: definitions["Category"];
+    category?: definitions['Category'];
     name: string;
     photoUrls: string[];
-    tags?: definitions["Tag"][];
+    tags?: definitions['Tag'][];
     /** pet status in the store */
-    status?: "available" | "pending" | "sold";
+    status?: 'available' | 'pending' | 'sold';
   };
   Tag: {
     id?: number;
@@ -92,7 +92,7 @@ export interface definitions {
     quantity?: number;
     shipDate?: string;
     /** Order Status */
-    status?: "placed" | "approved" | "delivered";
+    status?: 'placed' | 'approved' | 'delivered';
     complete?: boolean;
   };
   User: {
@@ -125,14 +125,14 @@ export interface operations {
     responses: {
       /** successful operation */
       200: {
-        schema: definitions["ApiResponse"];
+        schema: definitions['ApiResponse'];
       };
     };
   };
   updatePet: {
     parameters: {
       /** Pet object that needs to be added to the store */
-      body: definitions["Pet"];
+      body: definitions['Pet'];
     };
     responses: {
       /** Invalid ID supplied */
@@ -146,7 +146,7 @@ export interface operations {
   addPet: {
     parameters: {
       /** Pet object that needs to be added to the store */
-      body: definitions["Pet"];
+      body: definitions['Pet'];
     };
     responses: {
       /** Invalid input */
@@ -158,13 +158,13 @@ export interface operations {
     parameters: {
       query: {
         /** Status values that need to be considered for filter */
-        status: ("available" | "pending" | "sold")[];
+        status: ('available' | 'pending' | 'sold')[];
       };
     };
     responses: {
       /** successful operation */
       200: {
-        schema: definitions["Pet"][];
+        schema: definitions['Pet'][];
       };
       /** Invalid status value */
       400: unknown;
@@ -181,7 +181,7 @@ export interface operations {
     responses: {
       /** successful operation */
       200: {
-        schema: definitions["Pet"][];
+        schema: definitions['Pet'][];
       };
       /** Invalid tag value */
       400: unknown;
@@ -198,7 +198,7 @@ export interface operations {
     responses: {
       /** successful operation */
       200: {
-        schema: definitions["Pet"];
+        schema: definitions['Pet'];
       };
       /** Invalid ID supplied */
       400: unknown;
@@ -254,12 +254,12 @@ export interface operations {
   placeOrder: {
     parameters: {
       /** order placed for purchasing the pet */
-      body: definitions["Order"];
+      body: definitions['Order'];
     };
     responses: {
       /** successful operation */
       200: {
-        schema: definitions["Order"];
+        schema: definitions['Order'];
       };
       /** Invalid Order */
       400: unknown;
@@ -276,7 +276,7 @@ export interface operations {
     responses: {
       /** successful operation */
       200: {
-        schema: definitions["Order"];
+        schema: definitions['Order'];
       };
       /** Invalid ID supplied */
       400: unknown;
@@ -302,7 +302,7 @@ export interface operations {
   createUsersWithListInput: {
     parameters: {
       /** List of user object */
-      body: definitions["User"][];
+      body: definitions['User'][];
     };
     responses: {
       /** successful operation */
@@ -319,7 +319,7 @@ export interface operations {
     responses: {
       /** successful operation */
       200: {
-        schema: definitions["User"];
+        schema: definitions['User'];
       };
       /** Invalid username supplied */
       400: unknown;
@@ -335,7 +335,7 @@ export interface operations {
         username: string;
       };
       /** Updated user object */
-      body: definitions["User"];
+      body: definitions['User'];
     };
     responses: {
       /** Invalid user supplied */
@@ -388,7 +388,7 @@ export interface operations {
   createUsersWithArrayInput: {
     parameters: {
       /** List of user object */
-      body: definitions["User"][];
+      body: definitions['User'][];
     };
     responses: {
       /** successful operation */
@@ -399,7 +399,7 @@ export interface operations {
   createUser: {
     parameters: {
       /** Created user object */
-      body: definitions["User"];
+      body: definitions['User'];
     };
     responses: {
       /** successful operation */

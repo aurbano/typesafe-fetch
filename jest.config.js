@@ -1,10 +1,10 @@
-const modulesToTransform = ["node-fetch"];
+const modulesToTransform = ['node-fetch'];
 
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-  preset: "ts-jest",
-  testEnvironment: "node",
+  preset: 'ts-jest',
+  testEnvironment: 'node',
   transformIgnorePatterns: [
-    `<rootDir>/node_modules/(?!(${modulesToTransform.join("|")})).+\\.js$`,
+    `<rootDir>/node_modules/(?!(${modulesToTransform.join('|')})).+\\.js$`,
   ],
 };

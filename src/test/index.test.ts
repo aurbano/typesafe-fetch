@@ -1,16 +1,14 @@
-import fetch from "node-fetch";
-import { mocked } from "ts-jest/utils";
+import fetch from 'node-fetch';
+import { mocked } from 'ts-jest/utils';
 
-jest.mock("node-fetch", () => {
-  return jest.fn();
-});
+import getSafeFetch from '..';
+import { paths as PetstoreApi } from './petstore';
 
-import getSafeFetch from "..";
-import { paths as PetstoreApi } from "./petstore";
+jest.mock('node-fetch', () => jest.fn());
 
 const safeFetch = getSafeFetch<PetstoreApi>({ fetch: fetch as any });
 
-describe("safeFetch", () => {
+describe('safeFetch', () => {
   beforeEach(() => {
     mocked(fetch).mockClear();
     mocked(fetch).mockResolvedValue({
@@ -18,11 +16,11 @@ describe("safeFetch", () => {
     } as any);
   });
 
-  it("Replaces path params", async () => {
-    const method = "post";
+  it('Replaces path params', async () => {
+    const method = 'post';
     const petId = 123;
 
-    await safeFetch("/pet/{petId}/uploadImage", {
+    await safeFetch('/pet/{petId}/uploadImage', {
       method,
       path: {
         petId,
@@ -33,48 +31,48 @@ describe("safeFetch", () => {
     expect(fetch).toHaveBeenCalledWith(`/pet/${petId}/uploadImage`, { method });
   });
 
-  it("Sends query params", async () => {
-    const method = "get";
+  it('Sends query params', async () => {
+    const method = 'get';
 
-    await safeFetch("/pet/findByStatus", {
+    await safeFetch('/pet/findByStatus', {
       method,
       query: {
-        status: ["available"],
+        status: ['available'],
       },
     });
 
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(fetch).toHaveBeenCalledWith(
-      `/pet/findByStatus?${encodeURI("status[0]")}=available`,
+      `/pet/findByStatus?${encodeURI('status[0]')}=available`,
       {
         method,
-      }
+      },
     );
   });
 
-  it("Sends body params", async () => {
-    const method = "post";
+  it('Sends body params', async () => {
+    const method = 'post';
 
     const body = {
-      name: "test name",
-      photoUrls: ["test photo url"],
+      name: 'test name',
+      photoUrls: ['test photo url'],
     };
 
-    await safeFetch("/pet", {
+    await safeFetch('/pet', {
       method,
       body,
     });
 
     expect(fetch).toHaveBeenCalledTimes(1);
-    expect(fetch).toHaveBeenCalledWith("/pet", {
+    expect(fetch).toHaveBeenCalledWith('/pet', {
       method,
       body,
     });
   });
 
-  it("Allows different baseUrls", async () => {
-    const customBaseUrl = "http://example.com";
-    const method = "get";
+  it('Allows different baseUrls', async () => {
+    const customBaseUrl = 'http://example.com';
+    const method = 'get';
     const petId = 1;
 
     const safeFetchBaseUrl = getSafeFetch<PetstoreApi>({
@@ -82,7 +80,7 @@ describe("safeFetch", () => {
       fetch: fetch as any,
     });
 
-    await safeFetchBaseUrl("/pet/{petId}", {
+    await safeFetchBaseUrl('/pet/{petId}', {
       method,
       path: {
         petId,
@@ -95,8 +93,8 @@ describe("safeFetch", () => {
     });
   });
 
-  it("Supports custom fetch fns", async () => {
-    const method = "get";
+  it('Supports custom fetch fns', async () => {
+    const method = 'get';
     const petId = 1;
 
     const fetchFn = jest.fn();
@@ -108,7 +106,7 @@ describe("safeFetch", () => {
       fetch: fetchFn as any,
     });
 
-    await safeCustomFetch("/pet/{petId}", {
+    await safeCustomFetch('/pet/{petId}', {
       method,
       path: {
         petId,
