@@ -1,0 +1,73 @@
+name: 'CI'
+on: push
+
+jobs:
+  cache-deps:
+    name: Install and cache dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache yarn
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/node_modules
+          key: node-cache-${{ github.sha }}
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --prefer-offline
+
+  test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+    needs: cache-deps
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/node_modules
+          key: node-cache-${{ github.sha }}
+
+      - name: Test
+        run: yarn test
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/node_modules
+          key: node-cache-${{ github.sha }}
+
+      - name: Build
+        run: yarn build
+
+      - name: Publish to NPM
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
