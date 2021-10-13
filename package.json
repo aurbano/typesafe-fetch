@@ -1,6 +1,6 @@
 {
   "name": "typesafe-fetch",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Type-Safe version of fetch that uses OpenAPI TypeScript definitions to check API calls at compile type.",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
