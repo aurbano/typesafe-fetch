@@ -71,6 +71,19 @@ jobs:
         run: yarn build
 
       - name: Publish to NPM
+        id: publish-npm
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
+      
+      - name: Create Release
+        if: steps.publish-npm.outputs.version != 'none'
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ steps.publish-npm.outputs.version }}
+          release_name: v${{ steps.publish-npm.outputs.version }}
+          draft: false
+          prerelease: false
