@@ -1,8 +1,5 @@
 # Type-Safe Fetch
 
-> Warning! This is alpha software and will very likely still change significantly before the 1.0.0 release - use only to test the capabilities and suggest improvements.
-> Check out the roadmap to v1 below - it'll be updated as we get closer
-
 Given a **path** and a **method**, the TypeScript compiler will **guarantee** that you are passing the correct **path** and **query** parameters, and the correct **body** (and only if needed).
 
 Realised already how insanely awesome that is? The compiler will validate **every** aspect of the API request, including the response type - automatically!
@@ -27,14 +24,23 @@ yarn add typesafe-fetch
 Setup:
 
 ```ts
-import getSafeFetch from 'typesafe-fetch';
+import getSafeFetch, { FetchFunction } from 'typesafe-fetch';
 
 // See below how to generate the API definitions
 import { paths as ApiDefinition } from "./petstore";
 
+const fetchFn: FetchFunction = (url, { method, body, headers }) => {
+  // You can also use a global error handler by catching errors here
+  // Or insert any additional custom headers
+
+  // This is also where you can decide which fetch function to use, see
+  // below for examples using other libraries
+  return fetch(url, { method, body, headers }).then(res => res.json());
+};
+
 // Now set up using your existing OpenAPI definition
 const safeFetch = getSafeFetch<ApiDefinition>({
-  fetch, // define which fetch function to use
+  fetch: fetchFn,
 });
 
 // Make API calls :)
@@ -70,6 +76,43 @@ npx openapi-typescript https://petstore.swagger.io/v2/swagger.json --output pets
 
 Check out their docs for more advanced use-cases.
 
-## Roadmap to v1
+## Fetch function
 
-- [ ] Figure out a way to make it more generic, so that it could be used with any fetching library (e.g. axios)
+The library is setup by calling `getSafeFetch<ApiDefinition>()` with your `ApiDefinition` and an object containing an optional `baseUrl` and a mandatory `fetch` function.
+
+This function has the following signature:
+
+```ts
+type FetchOptions = {
+  method: string;
+  body?: BodyInit;
+  headers?: HeadersInit;
+}
+
+export type FetchFunction = (url: string, options: FetchOptions) => Promise<any>;
+```
+
+All you need is to pass a function that will send the request in any way, and return a `Promise` with the return data (not a `Response` object, you must extract it from there).
+
+### Using `fetch` as a fetch function
+
+You can either use the browser's built-in `fetch` function, or any of the polyfills such as `node-fetch`, `cross-fetch`... 
+
+```ts
+const fetchFn: FetchFunction = (url, { method, body, headers }) => 
+  fetch(url, { method, body, headers }).then(res => res.json());
+```
+
+### Using `axios` as a fetch function
+
+You can either use the browser's built-in `fetch` function, or any of the polyfills such as `node-fetch`, `cross-fetch`... 
+
+```ts
+const fetchFn: FetchFunction = (url, { method, body, headers }) => 
+  axios({
+    url,
+    method,
+    headers,
+    data: body,
+  }).then(res => res.data);
+```
