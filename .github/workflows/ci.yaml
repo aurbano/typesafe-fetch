@@ -44,6 +44,9 @@ jobs:
           path: ${{ github.workspace }}/node_modules
           key: node-cache-${{ github.sha }}
 
+      - name: Lint
+        run: yarn lint
+
       - name: Test
         run: yarn test
 
