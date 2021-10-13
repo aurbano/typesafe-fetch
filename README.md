@@ -1,6 +1,7 @@
 # Type-Safe Fetch
 
-Given a **path** and a **method**, the TypeScript compiler will **guarantee** that you are passing the correct **path** and **query** parameters, and the correct **body** (and only if needed).
+Given a **path** and a **method**, the TypeScript compiler will **guarantee** that you are passing the correct **path** and **query** parameters, and the correct **body** (and only if needed) + 
+it will return the correct type for the response object!
 
 Realised already how insanely awesome that is? The compiler will validate **every** aspect of the API request, including the response type - automatically!
 
