@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import { mocked } from 'ts-jest/utils';
 
 import getSafeFetch from '..';
-import { paths as PetstoreApi } from './petstore';
+import { paths as PetstoreApi } from './petstore.schema';
 
 jest.mock('node-fetch', () => jest.fn());
 
@@ -43,7 +43,26 @@ describe('safeFetch', () => {
 
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(fetch).toHaveBeenCalledWith(
-      `/pet/findByStatus?${encodeURI('status[0]')}=available`,
+      '/pet/findByStatus?status=available',
+      {
+        method,
+      },
+    );
+  });
+
+  it('Sends multiple same query params', async () => {
+    const method = 'get';
+
+    await safeFetch('/pet/findByStatus', {
+      method,
+      query: {
+        status: ['available', 'pending'],
+      },
+    });
+
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(fetch).toHaveBeenCalledWith(
+      `/pet/findByStatus?status=${encodeURIComponent('available,pending')}`,
       {
         method,
       },

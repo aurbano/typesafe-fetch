@@ -1,3 +1,5 @@
+/* global HeadersInit, BodyInit */
+
 import composeUrl from './composeUrl';
 import { KeyValueMap, SafeFetchOptions } from './types';
 

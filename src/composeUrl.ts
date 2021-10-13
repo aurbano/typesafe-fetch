@@ -1,7 +1,7 @@
 import { ComposeUrlParams, KeyValueMap } from './types';
 
 const addQuery = (url: string, query?: KeyValueMap): string => {
-  if (!query) {
+  if (!query || Object.entries(query).length < 1) {
     return encodeURI(url);
   }
 
