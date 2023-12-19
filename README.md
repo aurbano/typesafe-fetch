@@ -1,3 +1,13 @@
+# Better Alternatives
+
+This repo works perfectly fine and is mostly just TS definitios that can be used to create typed fetch functions. However, there are better libraries that do a lot more than that:
+
+* [orval](https://orval.dev/)
+* [openapi-typescript](https://github.com/drwpow/openapi-typescript)
+
+-------
+-------
+
 # Type-Safe Fetch
 
 Given a **path** and a **method**, the TypeScript compiler will **guarantee** that you are passing the correct **path** and **query** parameters, and the correct **body** (and only if needed) + 
